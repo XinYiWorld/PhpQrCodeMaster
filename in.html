@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>二维码制作(同一二维码跳转不同的下载链接)</title>
+</head>
+
+<style type="text/css">
+    html{font-size:12px;}
+    label{float:left; width:200px; margin-left:10px;}
+    .left{margin-left:80px;}
+    body{width:800px; margin: 0 auto}
+    .input{width:400px;}
+
+</style>
+
+<script language="JavaScript">
+    window.onload = function(){
+        checkLinkPlatforms();
+    }
+    function  InputCheck(SubForm){
+        if (SubForm.android_url.value == "" && document.getElementById("android_check").checked)
+        {
+            alert("Android下载链接不可为空!");
+            SubForm.android_url.focus();
+            return (false);
+        }
+
+        if (SubForm.ios_url.value == "" && document.getElementById("ios_check").checked)
+        {
+            alert("IOS下载链接不可为空!");
+            SubForm.ios_url.focus();
+            return (false);
+        }
+    }
+
+    function checkLinkPlatforms(obj){
+        var android_checked = document.getElementById("android_check").checked;
+        var ios_checked = document.getElementById("ios_check").checked;
+
+        if(android_checked == false && ios_checked == false){
+            alert("您至少选中一个渠道!")
+            obj.checked = "checked";
+            return;
+        }
+
+        //显示与隐藏输入框
+        document.getElementById("p_android_link").style.display = android_checked  ? "" : "none";
+        document.getElementById("p_ios_link").style.display = ios_checked ?  "" : "none";
+
+        //改变checkbox的名字，决定哪个要提交上去。
+        android_checked.name = android_checked ? "platforms[]" : "";
+        ios_checked.name = ios_checked ? "platforms[]" : "";
+
+    }
+</script>
+<body>
+<h1 >制作同一个二维码跳转Android和IOS下载链接</h1>
+<form name="SubForm" method="post" action="qrcodeMake.php" onSubmit="return InputCheck(this)">
+    <p>
+        <label for="code_size" class="label">链接渠道:</label>
+        <input id="android_check" name="platforms[]" type="checkbox" value="android" checked="checked" onclick="checkLinkPlatforms(this)" />Android
+        <input id="ios_check" name="platforms[]" type="checkbox" value="ios" checked="checked" onclick="checkLinkPlatforms(this)"/>IOS
+    <p/>
+
+    <p id="p_android_link">
+        <label for="android_url" class="label">Android下载链接:</label>
+        <input id="android_url" name="android_url" type="text" class="input" />
+    <p/>
+
+    <p  id="p_ios_link">
+        <label for="ios_url" class="label">IOS下载链接:</label>
+        <input id="ios_url" name="ios_url" type="text" class="input" />
+    <p/>
+
+    <p>
+        <label for="code_size" class="label">二维码点的大小:</label>
+        <select id="code_size" name="code_size">
+            <option disabled="disabled">--选择大小--</option>    // 点的大小：1到10
+            <option>1</option>
+            <option>2</option>
+            <option >3</option>
+            <option selected="selected">4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+        </select>
+    <p/>
+
+    <p>
+        <label for="code_correct_level" class="label">纠错级别:</label>
+        <select id="code_correct_level" name="code_correct_level">
+            <option disabled="disabled">--选择级别--</option>
+            <option value="L">L(扫码识别很慢)</option>
+            <option value="M">M(扫码识别慢)</option>
+            <option value="Q">Q(扫码识别快)</option>
+            <option value="H"selected="selected">H(扫码识别超快)</option>
+        </select>
+    <p/>
+
+    <p>
+        <label for="logo_in_qrcode_percent" class="label">二维码中的LOGO占二维码的百分比:</label>
+        <select id="logo_in_qrcode_percent" name="logo_in_qrcode_percent">
+            <option disabled="disabled">--请选择--</option>
+            <option value="3">3分之一</option>
+            <option value="4">4分之一</option>
+            <option value="5" selected="selected">5分之一</option>
+            <option value="6">6分之一</option>
+        </select>
+    <p/>
+
+    <p>
+        <label for="code_size" class="label">是否帖APP的LOGO:</label>
+        <input name="has_logo" type="radio" value="yes" checked="checked"/>有
+        <input   name="has_logo" type="radio" value="no"/>无
+    <p/>
+    <p>
+        <input type="submit" name="submit" value="  生成二维码  " class="left"/>
+    </p>
+
+</form>
+</body>
+</html>
